@@ -21,7 +21,6 @@ def random_word():
     word_list = [word for word in wordFile["French"]]
     random_choice = random.randint(0, len(word_list))
     canvas.itemconfig(language_word, text=word_list[random_choice])
-    print(word_list[random_choice])
 
 
 right_image = PhotoImage(file="images/right.png")
