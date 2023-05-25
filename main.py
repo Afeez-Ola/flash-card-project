@@ -29,6 +29,8 @@ timer = window.after(3000, card_flip)
 # Generating the words.
 def next_card():
     canvas.itemconfig(language_word, text=french_wordList[random_choice])
+    canvas.itemconfig(language, text="French", fill="black")
+    canvas.itemconfig(language_word, text=french_wordList[random_choice], fill="black")
 
 
 
