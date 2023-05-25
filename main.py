@@ -6,6 +6,7 @@ window = Tk()
 BACKGROUND_COLOR = "#B1DDC6"
 
 random_choice = random.randint(0, 101)
+new_random_choice = 0
 wordFile = pandas.read_csv("data/french_words.csv")
 french_wordList = [word for word in wordFile["French"]]
 english_wordList = [word for word in wordFile["English"]]
@@ -21,6 +22,10 @@ def card_flip():
     canvas.itemconfig(language, text="English", fill="white")
     canvas.itemconfig(language_word, text=english_wordList[random_choice], fill="white")
     window.after(3000, card_flip)
+    card_reset()
+    canvas.itemconfig(card_image, image=card_back_image)
+    canvas.itemconfig(language, text="English", fill="white")
+    canvas.itemconfig(language_word, text=english_wordList[new_random_choice], fill="white")
 
 
 timer = window.after(3000, card_flip)
@@ -28,10 +33,12 @@ timer = window.after(3000, card_flip)
 
 # Generating the words.
 def next_card():
+    global new_random_choice
     canvas.itemconfig(language_word, text=french_wordList[random_choice])
     canvas.itemconfig(language, text="French", fill="black")
-    canvas.itemconfig(language_word, text=french_wordList[random_choice], fill="black")
-
+    random.seed()
+    new_random_choice = random.randint(0, 101)
+    canvas.itemconfig(language_word, text=french_wordList[new_random_choice], fill="black")
 
 
 window.title("Flash Card Project")
