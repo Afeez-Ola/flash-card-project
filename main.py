@@ -17,13 +17,14 @@ words_to_learn = {
 }
 
 
-
 def missed_words():
     text = canvas.itemcget(language_word, "text")
     result = wordFile.loc[wordFile["French"] == text, "English"]
     words_to_learn["French"].append(text)
     words_to_learn["English"].append(result.item())
     print(words_to_learn["French"], words_to_learn["English"])
+
+
 def card_reset():
     window.after_cancel(timer)
 
@@ -56,6 +57,7 @@ def next_card():
 def missed_button_commands():
     next_card()
     missed_words()
+
 
 window.title("Flash Card Project")
 window.config(background=BACKGROUND_COLOR)
