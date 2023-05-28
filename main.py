@@ -29,8 +29,11 @@ def missed_words():
 
 def correct_words():
     text = canvas.itemcget(language_word, "text")
-    english_wordList.remove(text)
-    french_wordList.remove(text)
+    if text in english_wordList:
+        english_wordList.remove(text)
+    elif text in french_wordList:
+        french_wordList.remove(text)
+    print(text)
 
 
 def card_reset():
