@@ -27,20 +27,17 @@ def missed_words():
 
 def correct_words():
     text = canvas.itemcget(language_word, "text")
-
-    def word_index():
-        french_list = wordFile["French"].to_list()
-        english_list = wordFile["English"].to_list()
-        text_index = 0
-        if text in french_list:
-            text_index = french_list.index(text) + 1
-        elif text in english_list:
-            text_index = english_list.index(text) + 1
-        return text_index
+    french_list = wordFile["French"].to_list()
+    english_list = wordFile["English"].to_list()
+    text_index = 0
+    if text in french_list:
+        text_index = french_list.index(text) + 1
+    elif text in english_list:
+        text_index = english_list.index(text) + 1
 
     if (text in wordFile["English"].to_list()) or (text in wordFile["French"].to_list()):
-        wordFile["French"].pop(word_index())
-        wordFile["English"].pop(word_index())
+        wordFile["French"].pop(text_index)
+        wordFile["English"].pop(text_index)
         print(len(wordFile["English"]), len(wordFile["French"]))
         wordFile.to_csv("data/french_words.csv")
         print("Done!")
