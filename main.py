@@ -5,12 +5,11 @@ import pandas
 window = Tk()
 BACKGROUND_COLOR = "#B1DDC6"
 
-random_choice = random.randint(0, 100)
-new_random_choice = 0
 wordFile = pandas.read_csv("data/french_words.csv")
 french_wordList = [word for word in wordFile["French"]]
 english_wordList = [word for word in wordFile["English"]]
-
+random_choice = random.randint(0, len(wordFile["French"]))
+new_random_choice = 0
 words_to_learn = {
     "French": ["partie"],
     "English": ["part"]
@@ -18,22 +17,33 @@ words_to_learn = {
 
 
 def missed_words():
-    # global words_to_learn
     text = canvas.itemcget(language_word, "text")
     result = wordFile.loc[wordFile["French"] == text, "English"]
     words_to_learn["French"].append(text)
-    words_to_learn["English"].append(result.item())
+    words_to_learn["English"].append(''.join(result))
     df = pandas.DataFrame.from_dict(words_to_learn)
     df.to_csv("data/words_to_learn.csv", index=False)
 
 
 def correct_words():
     text = canvas.itemcget(language_word, "text")
-    if text in english_wordList:
-        english_wordList.remove(text)
-    elif text in french_wordList:
-        french_wordList.remove(text)
-    print(text)
+
+    def word_index():
+        french_list = wordFile["French"].to_list()
+        english_list = wordFile["English"].to_list()
+        text_index = 0
+        if text in french_list:
+            text_index = french_list.index(text) + 1
+        elif text in english_list:
+            text_index = english_list.index(text) + 1
+        return text_index
+
+    if (text in wordFile["English"].to_list()) or (text in wordFile["French"].to_list()):
+        wordFile["French"].pop(word_index())
+        wordFile["English"].pop(word_index())
+        print(len(wordFile["English"]), len(wordFile["French"]))
+        wordFile.to_csv("data/french_words.csv")
+        print("Done!")
 
 
 def card_reset():
