@@ -5,7 +5,7 @@ import pandas
 window = Tk()
 BACKGROUND_COLOR = "#B1DDC6"
 
-wordFile = pandas.read_csv("data/french_words.csv")
+wordFile = pandas.read_csv("data/french_words.csv", index_col=False)
 french_wordList = [word for word in wordFile["French"]]
 english_wordList = [word for word in wordFile["English"]]
 random_choice = random.randint(0, len(wordFile["French"]))
@@ -26,21 +26,23 @@ def missed_words():
 
 
 def correct_words():
+    global wordFile
     text = canvas.itemcget(language_word, "text")
     french_list = wordFile["French"].to_list()
     english_list = wordFile["English"].to_list()
     text_index = 0
     if text in french_list:
-        text_index = french_list.index(text) + 1
+        text_index = french_list.index(text)
     elif text in english_list:
-        text_index = english_list.index(text) + 1
+        text_index = english_list.index(text)
 
-    if (text in wordFile["English"].to_list()) or (text in wordFile["French"].to_list()):
-        wordFile["French"].pop(text_index)
-        wordFile["English"].pop(text_index)
+    if (text in wordFile["English"].values) or (text in wordFile["French"].values):
+        wordFile = wordFile.drop(wordFile.index[text_index])
+        wordFile.to_csv("data/french_words.csv", index=False)
         print(len(wordFile["English"]), len(wordFile["French"]))
-        wordFile.to_csv("data/french_words.csv")
         print("Done!")
+
+
 
 
 def card_reset():
@@ -68,7 +70,7 @@ def next_card():
     canvas.itemconfig(language_word, text=french_wordList[random_choice])
     canvas.itemconfig(language, text="French", fill="black")
     random.seed()
-    new_random_choice = random.randint(0, 101)
+    new_random_choice = random.randint(0, len(wordFile["French"]))
     canvas.itemconfig(language_word, text=french_wordList[new_random_choice], fill="black")
 
 
