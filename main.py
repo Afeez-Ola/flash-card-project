@@ -59,22 +59,19 @@ def card_reset():
 
 def card_flip():
     card_reset()
-    english_wordList = [word for word in wordFile["English"]]
+    english_wordList = wordFile["English"].tolist()
     canvas.itemconfig(card_image, image=card_back_image)
     canvas.itemconfig(language, text="English", fill="white")
-    try:
-        canvas.itemconfig(language_word, text=english_wordList[0], fill="white")
-    except IndexError:
-        canvas.itemconfig(language_word, text="You've learnt all the words", fill="white",font=("Ariel",20,"bold"))
+
+    if len(english_wordList) > 0:
+        try:
+            canvas.itemconfig(language_word, text=english_wordList[0], fill="white")
+        except IndexError:
+            canvas.itemconfig(language_word, text="You've learnt all the words", fill="white", font=("Ariel", 20, "bold"))
+    else:
+        canvas.itemconfig(language_word, text="You've learnt all the words", fill="white", font=("Ariel", 20, "bold"))
 
     window.after(3000, card_flip)
-    card_reset()
-    canvas.itemconfig(card_image, image=card_back_image)
-    canvas.itemconfig(language, text="English", fill="white")
-    try:
-        canvas.itemconfig(language_word, text=english_wordList[new_random_choice], fill="white")
-    except IndexError:
-        canvas.itemconfig(language_word, text="You've learnt all the words", fill="white",font=("Ariel",20,"bold"))
 
 
 timer = window.after(3000, card_flip)
