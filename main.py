@@ -65,7 +65,7 @@ def card_flip():
     try:
         canvas.itemconfig(language_word, text=english_wordList[0], fill="white")
     except IndexError:
-        canvas.itemconfig(language_word, text=english_wordList[0], fill="white")
+        canvas.itemconfig(language_word, text="You've learnt all the words", fill="white",font=("Ariel",20,"bold"))
 
     window.after(3000, card_flip)
     card_reset()
@@ -74,7 +74,7 @@ def card_flip():
     try:
         canvas.itemconfig(language_word, text=english_wordList[new_random_choice], fill="white")
     except IndexError:
-        canvas.itemconfig(language_word, text=english_wordList[new_random_choice], fill="white")
+        canvas.itemconfig(language_word, text="You've learnt all the words", fill="white",font=("Ariel",20,"bold"))
 
 
 timer = window.after(3000, card_flip)
@@ -92,11 +92,11 @@ def next_card():
         canvas.itemconfig(language_word, text=french_wordList[new_random_choice], fill="black")
 
     except IndexError:
-        new_random_choice = random.randint(0, len(french_wordList) - 1)
+        canvas.itemconfig(language_word, text="Tu as appris tous les mots", fill="black",font=("Ariel",20,"bold"))
+
     except ValueError:
-        new_random_choice = random.randint(0, len(french_wordList) - 1)
-    finally:
-        canvas.itemconfig(language_word, text=french_wordList[new_random_choice], fill="black")
+        canvas.itemconfig(language_word, text="Tu as appris tous les mots", fill="black",font=("Ariel",20,"bold"))
+
 
 
 def missed_button_commands():
@@ -124,9 +124,9 @@ language = canvas.create_text(400, 150, font=("Arial", 40, "italic"), text="Fren
 try:
     language_word = canvas.create_text(400, 273, font=("Arial", 60, "bold"), text=wordFile["French"][0])
 except IndexError:
-    language_word = canvas.create_text(400, 273, font=("Arial", 60, "bold"), text=wordFile["French"][0])
+    language_word = canvas.create_text(400, 273, font=("Arial", 20, "bold"), text="Tu as appris tous les mots",)
 except ValueError:
-    language_word = canvas.create_text(400, 273, font=("Arial", 60, "bold"), text=wordFile["French"][0])
+    language_word = canvas.create_text(400, 273, font=("Arial", 20, "bold"), text="Tu as appris tous les mots",)
 
 right_image = PhotoImage(file="images/right.png")
 wrong_image = PhotoImage(file="images/wrong.png")
