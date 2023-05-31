@@ -27,19 +27,22 @@ def missed_words():
 def correct_words():
     global wordFile
     text = canvas.itemcget(language_word, "text")
-    french_list = wordFile["French"].to_list()
-    english_list = wordFile["English"].to_list()
-    text_index = 0
+
+    french_list = wordFile["French"].tolist()
+    english_list = wordFile["English"].tolist()
+
     if text in french_list:
         text_index = french_list.index(text)
     elif text in english_list:
         text_index = english_list.index(text)
+    else:
+        return
 
-    if (text in wordFile["English"].values) or (text in wordFile["French"].values):
-        wordFile = wordFile.drop(wordFile.index[text_index])
-        wordFile.to_csv("data/french_words.csv", index=False)
-        print(len(wordFile["English"]), len(wordFile["French"]))
-        print("Done!")
+    wordFile = wordFile.drop(wordFile.index[text_index])
+    wordFile.to_csv("data/french_words.csv", index=False)
+
+    # print(len(wordFile["English"]), len(wordFile["French"]))
+    # print("Done!")
 
 
 def card_reset():
