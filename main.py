@@ -39,17 +39,17 @@ def correct_words():
     global wordFile
     text = canvas.itemcget(language_word, "text")
 
-    french_list = wordFile["French"].tolist()
-    english_list = wordFile["English"].tolist()
-
-    if text in french_list:
-        wordFile.drop(wordFile[wordFile['French'] == text].index, inplace=True)
-        print(wordFile)
-    elif text in english_list:
-        wordFile.drop(wordFile[wordFile['English'] == text].index, inplace=True)
-        print(wordFile)
+    # Check if text is present in the 'French' column
+    if text in wordFile["French"].tolist():
+        wordFile = wordFile[wordFile['French'] != text]  # Remove rows where 'French' column matches the text
+        # print(wordFile)
+    # Check if text is present in the 'English' column
+    elif text in wordFile["English"].tolist():
+        wordFile = wordFile[wordFile['English'] != text]  # Remove rows where 'English' column matches the text
+        # print(wordFile)
     else:
         return
+
     wordFile.to_csv("data/words_to_learn.csv", index=False)
 
 
