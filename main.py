@@ -6,13 +6,12 @@ window = Tk()
 BACKGROUND_COLOR = "#B1DDC6"
 
 wordFile = pandas.read_csv("data/french_words.csv", index_col=False)
-french_wordList = [word for word in wordFile["French"]]
-english_wordList = [word for word in wordFile["English"]]
-random_choice = random.randint(0, len(wordFile["French"]))
+
+random_choice = (random.randint(0, len(wordFile["French"])))
 new_random_choice = 0
 words_to_learn = {
-    "French": ["partie"],
-    "English": ["part"]
+    "French": [],
+    "English": []
 }
 
 
@@ -51,6 +50,8 @@ def card_reset():
 
 def card_flip():
     card_reset()
+
+    english_wordList = [word for word in wordFile["English"]]
     canvas.itemconfig(card_image, image=card_back_image)
     canvas.itemconfig(language, text="English", fill="white")
     canvas.itemconfig(language_word, text=english_wordList[0], fill="white")
@@ -67,6 +68,7 @@ timer = window.after(3000, card_flip)
 # Generating the words.
 def next_card():
     global new_random_choice
+    french_wordList = [word for word in wordFile["French"]]
     canvas.itemconfig(language_word, text=french_wordList[random_choice])
     canvas.itemconfig(language, text="French", fill="black")
     random.seed()
@@ -92,7 +94,7 @@ card_back_image = PhotoImage(file="images/card_back.png")
 
 card_image = canvas.create_image(410, 273, image=card_front_image)
 language = canvas.create_text(400, 150, font=("Ariel", 40, "italic"), text="French")
-language_word = canvas.create_text(400, 273, font=("Ariel", 60, "bold"), text=french_wordList[0])
+language_word = canvas.create_text(400, 273, font=("Ariel", 60, "bold"), text=wordFile["French"][0])
 canvas.grid(column=1, row=1, padx=50, pady=50)
 
 right_image = PhotoImage(file="images/right.png")
