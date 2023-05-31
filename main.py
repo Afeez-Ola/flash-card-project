@@ -2,12 +2,22 @@ from tkinter import *
 import random
 import pandas
 
+try:
+    wordFile = pandas.read_csv("data/words_to_learn.csv", index_col=False)
+except FileNotFoundError:
+    wordFile = pandas.read_csv("data/french_words.csv", index_col=False)
+
+
+
 window = Tk()
 BACKGROUND_COLOR = "#B1DDC6"
 
-wordFile = pandas.read_csv("data/french_words.csv", index_col=False)
+print(wordFile)
+try:
+    random_choice = (random.randint(0, len(wordFile) - 1))
+except ValueError:
+    wordFile = pandas.read_csv("data/french_words.csv", index_col=False)
 
-random_choice = (random.randint(0, len(wordFile) - 1))
 new_random_choice = 0
 words_to_learn = {
     "French": [],
@@ -15,13 +25,14 @@ words_to_learn = {
 }
 
 
-def missed_words():
-    text = canvas.itemcget(language_word, "text")
-    result = wordFile.loc[wordFile["French"] == text, "English"]
-    words_to_learn["French"].append(text)
-    words_to_learn["English"].append(''.join(result))
-    df = pandas.DataFrame.from_dict(words_to_learn)
-    df.to_csv("data/words_to_learn.csv", index=False)
+# def missed_words():
+#     text = canvas.itemcget(language_word, "text")
+#     result = wordFile.loc[wordFile["French"] == text, "English"]
+#     words_to_learn["French"].append(text)
+#     words_to_learn["English"].append(''.join(result))
+#     print(words_to_learn["English"], words_to_learn["French"])
+#     df = pandas.DataFrame.from_dict(words_to_learn)
+#     df.to_csv("data/words_to_learn.csv", index=False)
 
 
 def correct_words():
@@ -32,17 +43,14 @@ def correct_words():
     english_list = wordFile["English"].tolist()
 
     if text in french_list:
-        text_index = french_list.index(text)
+        wordFile.drop(wordFile[wordFile['French'] == text].index, inplace=True)
+        print(wordFile)
     elif text in english_list:
-        text_index = english_list.index(text)
+        wordFile.drop(wordFile[wordFile['English'] == text].index, inplace=True)
+        print(wordFile)
     else:
         return
-
-    wordFile = wordFile.drop(wordFile.index[text_index])
-    wordFile.to_csv("data/french_words.csv", index=False)
-
-    # print(len(wordFile["English"]), len(wordFile["French"]))
-    # print("Done!")
+    wordFile.to_csv("data/words_to_learn.csv", index=False)
 
 
 def card_reset():
@@ -57,8 +65,7 @@ def card_flip():
     try:
         canvas.itemconfig(language_word, text=english_wordList[0], fill="white")
     except IndexError:
-        canvas.itemconfig(language_word, text="That's all the words available", fill="white",
-                          font=("Ariel", 20, "bold"))
+        canvas.itemconfig(language_word, text=english_wordList[0], fill="white")
 
     window.after(3000, card_flip)
     card_reset()
@@ -67,8 +74,7 @@ def card_flip():
     try:
         canvas.itemconfig(language_word, text=english_wordList[new_random_choice], fill="white")
     except IndexError:
-        canvas.itemconfig(language_word, text="That's all the words available", fill="white",
-                          font=("Ariel", 20, "bold"))
+        canvas.itemconfig(language_word, text=english_wordList[new_random_choice], fill="white")
 
 
 timer = window.after(3000, card_flip)
@@ -83,22 +89,23 @@ def next_card():
     # Generate a new random choice within the valid range
     try:
         new_random_choice = random.randint(0, len(french_wordList) - 1)
+        canvas.itemconfig(language_word, text=french_wordList[new_random_choice], fill="black")
+
     except IndexError:
-        canvas.itemconfig(language_word, text="C'est tous les mots disponibles", fill="black",
-                          font=("Ariel", 20, "bold"))
+        new_random_choice = random.randint(0, len(french_wordList) - 1)
     except ValueError:
-        canvas.itemconfig(language_word, text="C'est tous les mots disponibles", fill="black",
-                          font=("Ariel", 20, "bold"))
-    else:
+        new_random_choice = random.randint(0, len(french_wordList) - 1)
+    finally:
         canvas.itemconfig(language_word, text=french_wordList[new_random_choice], fill="black")
 
 
 def missed_button_commands():
     next_card()
-    missed_words()
+    # missed_words()
 
 
 def correct_button_commands():
+    # correct_words()
     correct_words()
     next_card()
 
@@ -116,10 +123,10 @@ card_image = canvas.create_image(410, 273, image=card_front_image)
 language = canvas.create_text(400, 150, font=("Arial", 40, "italic"), text="French")
 try:
     language_word = canvas.create_text(400, 273, font=("Arial", 60, "bold"), text=wordFile["French"][0])
-except KeyError:
-    language_word = canvas.create_text(400, 273, font=("Arial", 60, "bold"), text="C'est tous les mots disponibles")
+except IndexError:
+    language_word = canvas.create_text(400, 273, font=("Arial", 60, "bold"), text=wordFile["French"][0])
 except ValueError:
-    language_word = canvas.create_text(400, 273, font=("Arial", 60, "bold"), text="C'est tous les mots disponibles")
+    language_word = canvas.create_text(400, 273, font=("Arial", 60, "bold"), text=wordFile["French"][0])
 
 right_image = PhotoImage(file="images/right.png")
 wrong_image = PhotoImage(file="images/wrong.png")
