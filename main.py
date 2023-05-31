@@ -7,7 +7,7 @@ BACKGROUND_COLOR = "#B1DDC6"
 
 wordFile = pandas.read_csv("data/french_words.csv", index_col=False)
 
-random_choice = (random.randint(0, len(wordFile["French"])))
+random_choice = (random.randint(0,len(wordFile)))
 new_random_choice = 0
 words_to_learn = {
     "French": [],
@@ -50,7 +50,6 @@ def card_reset():
 
 def card_flip():
     card_reset()
-
     english_wordList = [word for word in wordFile["English"]]
     canvas.itemconfig(card_image, image=card_back_image)
     canvas.itemconfig(language, text="English", fill="white")
