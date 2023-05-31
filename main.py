@@ -51,12 +51,19 @@ def card_flip():
     english_wordList = [word for word in wordFile["English"]]
     canvas.itemconfig(card_image, image=card_back_image)
     canvas.itemconfig(language, text="English", fill="white")
-    canvas.itemconfig(language_word, text=english_wordList[0], fill="white")
+    try:
+        canvas.itemconfig(language_word, text=english_wordList[0], fill="white")
+    except IndexError:
+        canvas.itemconfig(language_word, text="That's all the words available", fill="white",font=("Ariel", 20, "bold"))
+
     window.after(3000, card_flip)
     card_reset()
     canvas.itemconfig(card_image, image=card_back_image)
     canvas.itemconfig(language, text="English", fill="white")
-    canvas.itemconfig(language_word, text=english_wordList[new_random_choice], fill="white")
+    try:
+        canvas.itemconfig(language_word, text=english_wordList[new_random_choice], fill="white")
+    except IndexError:
+        canvas.itemconfig(language_word, text="That's all the words available", fill="white",font=("Ariel", 20, "bold"))
 
 
 timer = window.after(3000, card_flip)
@@ -72,7 +79,10 @@ def next_card():
     try:
         new_random_choice = random.randint(0, len(french_wordList) - 1)
     except IndexError:
-        canvas.itemconfig(language_word, text="C'est tous les mots français disponibles", fill="black")
+        canvas.itemconfig(language_word, text="C'est tous les mots disponibles", fill="black",font=("Ariel", 20, "bold"))
+    except ValueError:
+        canvas.itemconfig(language_word, text="C'est tous les mots disponibles", fill="black",
+                          font=("Ariel", 20, "bold"))
     else:
         canvas.itemconfig(language_word, text=french_wordList[new_random_choice], fill="black")
 
