@@ -80,19 +80,15 @@ timer = window.after(3000, card_flip)
 # Generating the words.
 def next_card():
     global new_random_choice
-    french_wordList = [word for word in wordFile["French"]]
+    french_wordList = wordFile["French"].tolist()
     canvas.itemconfig(language, text="French", fill="black")
 
-    # Generate a new random choice within the valid range
-    try:
+    if len(french_wordList) > 0:
         new_random_choice = random.randint(0, len(french_wordList) - 1)
         canvas.itemconfig(language_word, text=french_wordList[new_random_choice], fill="black")
+    else:
+        canvas.itemconfig(language_word, text="Tu as appris tous les mots", fill="black", font=("Ariel", 20, "bold"))
 
-    except IndexError:
-        canvas.itemconfig(language_word, text="Tu as appris tous les mots", fill="black",font=("Ariel",20,"bold"))
-
-    except ValueError:
-        canvas.itemconfig(language_word, text="Tu as appris tous les mots", fill="black",font=("Ariel",20,"bold"))
 
 
 
