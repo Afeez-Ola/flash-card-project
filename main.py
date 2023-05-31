@@ -7,12 +7,13 @@ BACKGROUND_COLOR = "#B1DDC6"
 
 wordFile = pandas.read_csv("data/french_words.csv", index_col=False)
 
-random_choice = (random.randint(0,len(wordFile)))
+random_choice = (random.randint(0,len(wordFile)-1))
 new_random_choice = 0
 words_to_learn = {
     "French": [],
     "English": []
 }
+
 
 
 def missed_words():
@@ -71,7 +72,7 @@ def next_card():
     canvas.itemconfig(language_word, text=french_wordList[random_choice])
     canvas.itemconfig(language, text="French", fill="black")
     random.seed()
-    new_random_choice = random.randint(0, len(wordFile["French"]))
+    new_random_choice = random.randint(0, len(wordFile)-1)
     canvas.itemconfig(language_word, text=french_wordList[new_random_choice], fill="black")
 
 
