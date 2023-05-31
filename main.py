@@ -57,7 +57,8 @@ def card_flip():
     try:
         canvas.itemconfig(language_word, text=english_wordList[0], fill="white")
     except IndexError:
-        canvas.itemconfig(language_word, text="That's all the words available", fill="white",font=("Ariel", 20, "bold"))
+        canvas.itemconfig(language_word, text="That's all the words available", fill="white",
+                          font=("Ariel", 20, "bold"))
 
     window.after(3000, card_flip)
     card_reset()
@@ -66,7 +67,8 @@ def card_flip():
     try:
         canvas.itemconfig(language_word, text=english_wordList[new_random_choice], fill="white")
     except IndexError:
-        canvas.itemconfig(language_word, text="That's all the words available", fill="white",font=("Ariel", 20, "bold"))
+        canvas.itemconfig(language_word, text="That's all the words available", fill="white",
+                          font=("Ariel", 20, "bold"))
 
 
 timer = window.after(3000, card_flip)
@@ -82,7 +84,8 @@ def next_card():
     try:
         new_random_choice = random.randint(0, len(french_wordList) - 1)
     except IndexError:
-        canvas.itemconfig(language_word, text="C'est tous les mots disponibles", fill="black",font=("Ariel", 20, "bold"))
+        canvas.itemconfig(language_word, text="C'est tous les mots disponibles", fill="black",
+                          font=("Ariel", 20, "bold"))
     except ValueError:
         canvas.itemconfig(language_word, text="C'est tous les mots disponibles", fill="black",
                           font=("Ariel", 20, "bold"))
@@ -102,17 +105,25 @@ def correct_button_commands():
 
 window.title("Flash Card Project")
 window.config(background=BACKGROUND_COLOR)
+
 canvas = Canvas(background=BACKGROUND_COLOR, width=800, height=526, highlightthickness=0)
+canvas.grid(column=1, row=1, padx=50, pady=50)
+
 card_front_image = PhotoImage(file="images/card_front.png")
 card_back_image = PhotoImage(file="images/card_back.png")
-
 card_image = canvas.create_image(410, 273, image=card_front_image)
-language = canvas.create_text(400, 150, font=("Ariel", 40, "italic"), text="French")
-language_word = canvas.create_text(400, 273, font=("Ariel", 60, "bold"), text=wordFile["French"][0])
-canvas.grid(column=1, row=1, padx=50, pady=50)
+
+language = canvas.create_text(400, 150, font=("Arial", 40, "italic"), text="French")
+try:
+    language_word = canvas.create_text(400, 273, font=("Arial", 60, "bold"), text=wordFile["French"][0])
+except KeyError:
+    language_word = canvas.create_text(400, 273, font=("Arial", 60, "bold"), text="C'est tous les mots disponibles")
+except ValueError:
+    language_word = canvas.create_text(400, 273, font=("Arial", 60, "bold"), text="C'est tous les mots disponibles")
 
 right_image = PhotoImage(file="images/right.png")
 wrong_image = PhotoImage(file="images/wrong.png")
+
 right_button = Button(image=right_image, borderwidth=0, highlightthickness=0, command=correct_button_commands)
 right_button.grid(column=2, row=2, padx=50, pady=50)
 
