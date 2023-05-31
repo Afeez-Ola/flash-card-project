@@ -7,13 +7,12 @@ BACKGROUND_COLOR = "#B1DDC6"
 
 wordFile = pandas.read_csv("data/french_words.csv", index_col=False)
 
-random_choice = (random.randint(0,len(wordFile)-1))
+random_choice = (random.randint(0, len(wordFile) - 1))
 new_random_choice = 0
 words_to_learn = {
     "French": [],
     "English": []
 }
-
 
 
 def missed_words():
@@ -43,8 +42,6 @@ def correct_words():
         print("Done!")
 
 
-
-
 def card_reset():
     window.after_cancel(timer)
 
@@ -69,11 +66,15 @@ timer = window.after(3000, card_flip)
 def next_card():
     global new_random_choice
     french_wordList = [word for word in wordFile["French"]]
-    canvas.itemconfig(language_word, text=french_wordList[random_choice])
     canvas.itemconfig(language, text="French", fill="black")
-    random.seed()
-    new_random_choice = random.randint(0, len(wordFile)-1)
-    canvas.itemconfig(language_word, text=french_wordList[new_random_choice], fill="black")
+
+    # Generate a new random choice within the valid range
+    try:
+        new_random_choice = random.randint(0, len(french_wordList) - 1)
+    except IndexError:
+        canvas.itemconfig(language_word, text="C'est tous les mots français disponibles", fill="black")
+    else:
+        canvas.itemconfig(language_word, text=french_wordList[new_random_choice], fill="black")
 
 
 def missed_button_commands():
