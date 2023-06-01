@@ -7,6 +7,8 @@ try:
 except FileNotFoundError:
     wordFile = pandas.read_csv("data/french_words.csv", index_col=False)
 
+
+
 window = Tk()
 BACKGROUND_COLOR = "#B1DDC6"
 
@@ -57,20 +59,22 @@ def card_reset():
 
 def card_flip():
     card_reset()
-    english_wordList = wordFile["English"].tolist()
+    english_wordList = [word for word in wordFile["English"]]
     canvas.itemconfig(card_image, image=card_back_image)
     canvas.itemconfig(language, text="English", fill="white")
-
-    if len(english_wordList) > 0:
-        try:
-            canvas.itemconfig(language_word, text=english_wordList[0], fill="white")
-        except IndexError:
-            canvas.itemconfig(language_word, text="You've learnt all the words", fill="white",
-                              font=("Ariel", 20, "bold"))
-    else:
-        canvas.itemconfig(language_word, text="You've learnt all the words", fill="white", font=("Ariel", 20, "bold"))
+    try:
+        canvas.itemconfig(language_word, text=english_wordList[0], fill="white")
+    except IndexError:
+        canvas.itemconfig(language_word, text="You've learnt all the words", fill="white",font=("Ariel",20,"bold"))
 
     window.after(3000, card_flip)
+    card_reset()
+    canvas.itemconfig(card_image, image=card_back_image)
+    canvas.itemconfig(language, text="English", fill="white")
+    try:
+        canvas.itemconfig(language_word, text=english_wordList[new_random_choice], fill="white")
+    except IndexError:
+        canvas.itemconfig(language_word, text="You've learnt all the words", fill="white",font=("Ariel",20,"bold"))
 
 
 timer = window.after(3000, card_flip)
@@ -92,6 +96,8 @@ def next_card():
 
     except ValueError:
         canvas.itemconfig(language_word, text="Tu as appris tous les mots", fill="black",font=("Ariel",20,"bold"))
+
+
 
 def missed_button_commands():
     next_card()
