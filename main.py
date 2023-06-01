@@ -95,9 +95,11 @@ def next_card():
 
 def missed_button_commands():
     next_card()
+    # missed_words()
 
 
 def correct_button_commands():
+    # correct_words()
     correct_words()
     next_card()
 
@@ -113,11 +115,12 @@ card_back_image = PhotoImage(file="images/card_back.png")
 card_image = canvas.create_image(410, 273, image=card_front_image)
 
 language = canvas.create_text(400, 150, font=("Arial", 40, "italic"), text="French")
-
-if len(wordFile["French"]) > 0:
+try:
     language_word = canvas.create_text(400, 273, font=("Arial", 60, "bold"), text=wordFile["French"][0])
-else:
-    language_word = canvas.create_text(400, 273, font=("Arial", 20, "bold"), text="Tu as appris tous les mots")
+except IndexError:
+    language_word = canvas.create_text(400, 273, font=("Arial", 20, "bold"), text="Tu as appris tous les mots",)
+except ValueError:
+    language_word = canvas.create_text(400, 273, font=("Arial", 20, "bold"), text="Tu as appris tous les mots",)
 
 right_image = PhotoImage(file="images/right.png")
 wrong_image = PhotoImage(file="images/wrong.png")
